@@ -1,13 +1,31 @@
 # Makefile to demonstrate the Toolchain
 
+# build firmware with own written linker and startup files
+simple: firmware_simple.elf 
+	@echo "simple target"
+
+# build firmware with linker and startup files copyed from CubeIDE
+cube: firmware_cube.elf 
+	@echo "cube target"
+
 # link it to get the executable
 # TODO don't work. cannot find libc.a: No such file or directory
-firmware.elf: main.o startup_stm32f411retx.o
+firmware_simple.elf: main.o c_startup.o
+	@echo "____"
+	@echo "link everything to get the executable"
+	arm-none-eabi-gcc -nostdlib -o firmware.elf -T controller.ld main.o c_startup.o -lgcc 
+
+firmware_cube.elf: main.o startup_stm32f411retx.o
 	@echo "____"
 	@echo "link everything to get the executable"
 	arm-none-eabi-gcc -nostdlib -o firmware.elf -T STM32F411RETX_FLASH.ld main.o startup_stm32f411retx.o -lgcc 
-
 	# from example: arm-none-eabi-gcc -g3 -nostdlib -o firmware.elf -T firmware.ld main.o c_startup.o -L. -lfilter -lgcc
+
+# assemble the startup code
+c_startup.o: c_startup.s
+	@echo "____"
+	@echo "run assembler for the simpele c_startup.s file"
+	arm-none-eabi-as c_startup.s -o c_startup.o
 
 # assemble the startup code
 startup_stm32f411retx.o: startup_stm32f411retx.s
@@ -42,4 +60,4 @@ main.i: main.c
 	file main.i
 
 clean:
-	rm *.i main.s *.o
+	rm *.i main.s *.o *.elf
