@@ -26,8 +26,8 @@ SECTIONS
   } > SRAM
 }
 
-INCLUDE c_startup.o
-INPUT ( main.o ) 
+INCLUDE build/c_startup.o
+INPUT ( build/main.o ) 
 
 OUTPUT_FORMAT("elf32-littlearm")
 OUTPUT_ARCH(arm)
