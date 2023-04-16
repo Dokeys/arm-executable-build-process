@@ -18,7 +18,7 @@ build/system.o: src/system.c
 build/startup_stm32f411retx.o: startup/startup_stm32f411retx.s
 	@echo ""
 	@echo "run assembler for startup_stm32f411retx.s"
-	arm-none-eabi-as startup/startup_stm32f411retx.s -o build/startup_stm32f411retx.o
+	arm-none-eabi-as inc/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f411xe.s -o build/startup_stm32f411retx.o
 
 clean:
 	rm build/*
