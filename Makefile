@@ -11,7 +11,7 @@ BUILD_DIR := build/
 all: $(BUILD_DIR)main.o $(BUILD_DIR)system.o $(BUILD_DIR)$(STARTUP_FILE_NAME).o
 	@echo "____"
 	@echo "build the executable elf and hex file with the bevor generated object files"
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mlittle-endian -mthumb -DSTM32F411xE -Tlinker/STM32F411RETX_FLASH.ld -Wl,--gc-sections $(BUILD_DIR)system.o $(BUILD_DIR)main.o $(BUILD_DIR)$(STARTUP_FILE_NAME).o -o main.elf
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mlittle-endian -mthumb -mfloat-abi=hard -DSTM32F411xE -Tlinker/STM32F411RETX_FLASH.ld -Wl,--gc-sections $(BUILD_DIR)system.o $(BUILD_DIR)main.o $(BUILD_DIR)$(STARTUP_FILE_NAME).o -o main.elf
 	arm-none-eabi-objcopy -Oihex main.elf main.hex
 
 # TODO don't work at the moment
@@ -32,7 +32,7 @@ $(BUILD_DIR)main.s: $(BUILD_DIR)main.i
 	@echo "____"
 	@echo "run compiler for main.i:"
 	# arm-none-eabi-gcc -S -mcpu=cortex-m4 -mfloat-abi=hard $(BUILD_DIR)main.i -o $(BUILD_DIR)main.s
-	arm-none-eabi-gcc -S -Wall -mcpu=cortex-m4 -mlittle-endian -mthumb -Os -c $(BUILD_DIR)main.i -o $(BUILD_DIR)main.s
+	arm-none-eabi-gcc -S -Wall -mcpu=cortex-m4 -mlittle-endian -mthumb -mfloat-abi=hard -Os -c $(BUILD_DIR)main.i -o $(BUILD_DIR)main.s
 	@echo "generated file:"
 	file $(BUILD_DIR)main.s
 
@@ -50,7 +50,7 @@ $(BUILD_DIR)main.i: src/main.c
 $(BUILD_DIR)system.o: src/system.c
 	@echo "____"
 	@echo "build system.o for SystemInit and SystemInitError"
-	arm-none-eabi-gcc -Wall -mcpu=cortex-m4 -mlittle-endian -mthumb -Iinc/Drivers/CMSIS/Device/ST/STM32F4xx/Include -Iinc/Drivers/CMSIS/Core/Include -DSTM32F411xE -Os -c src/system.c -o $(BUILD_DIR)system.o
+	arm-none-eabi-gcc -Wall -mcpu=cortex-m4 -mlittle-endian -mthumb -mfloat-abi=hard -Iinc/Drivers/CMSIS/Device/ST/STM32F4xx/Include -Iinc/Drivers/CMSIS/Core/Include -DSTM32F411xE -Os -c src/system.c -o $(BUILD_DIR)system.o
 
 # assemble the startup code
 $(BUILD_DIR)startup_stm32f411xe.o: $(STARTUP_PATH)$(STARTUP_FILE_NAME).s
