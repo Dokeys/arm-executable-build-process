@@ -1,12 +1,19 @@
 /*
+ * system.c
  *
+ * Created on: 23.04.2023
+ * Autor: Dominik Knoll
+ *
+ * Description:
+ * System file for the NUCLEO-F411RE, without the use of the STM32 HAL.
+ *
+ * File written with the help of stm32f411re - reference manual,
+ * STM32CubeIDE (just for the clock config overview) and this Tutorial:
  * https://controllerstech.com/stm32-clock-setup-using-registers/
+ *
  */
 #include "stm32f411xe.h"
 
-void SystemInitError(uint8_t error_source);
-
-// TODO configure for stm32f411
 /**
  * @brief Configure the clocks for the NUCLEO-F411RE board
  *
@@ -48,11 +55,5 @@ void SystemInit(void)
 	/* Set the system clock switch (mux) to PLL in the RCC clock configuration register */
 	RCC->CFGR |= RCC_CFGR_SW_PLL;
 	while (!(RCC->CFGR & RCC_CFGR_SWS_PLL))
-		;
-}
-
-void SystemInitError(uint8_t error_source)
-{
-	while (1)
 		;
 }
