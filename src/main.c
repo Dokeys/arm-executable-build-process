@@ -1,3 +1,15 @@
+/*
+ * main.c
+ *
+ * Creaded on: 23.04.2023
+ * Autor: Dominik Knoll
+ *
+ * Description:
+ * This is the main file for the arm-executable-build-process.
+ * This file let the user led of the NUCLEO-F411RE on Port A5 flash,
+ * without the use of the STM32 HAL.
+ */
+
 #include "stm32f411xe.h"
 
 /** @brief init the user led
@@ -30,11 +42,12 @@ static void reset_user_led(void)
 	GPIOA->BSRR |= GPIO_BRR_BR5;
 }
 
-static void delay(uint32_t time)
+static void delay(uint32_t timeMs)
 {
-	for (uint32_t i = 0; i <= time; i++)
+	for (uint32_t i = 0; i <= timeMs; i++)
 	{
-		asm("NOP");
+		for (uint32_t j = 0; j <= 10000; j++) /* this for loops takes 1ms */
+			asm("NOP");						  /* with the 100 MHz one NOP cycle shout take 10 nano secounds*/
 	}
 }
 
@@ -44,8 +57,8 @@ int main(void)
 	while (1)
 	{
 		set_user_led();
-		delay(2000000);
+		delay(1000);
 		reset_user_led();
-		delay(2000000);
+		delay(1000);
 	}
 }
