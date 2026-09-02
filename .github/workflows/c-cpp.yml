@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Build 
 
 on:
   push:
@@ -8,10 +8,25 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: make
-      run: make
+      - uses: actions/checkout@v4
+
+      - name: Install ARM GCC
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi
+
+      - name: Check ARM tools
+        run: |
+          arm-none-eabi-gcc --version
+          arm-none-eabi-objcopy --version
+        
+      - name: Install Linux Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y file
+
+      - name: Build
+        run: make
