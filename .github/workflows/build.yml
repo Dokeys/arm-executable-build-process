@@ -30,3 +30,11 @@ jobs:
 
       - name: Build
         run: make
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: |
+            firmware.elf
+            firmware.hex
